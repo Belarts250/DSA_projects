@@ -34,7 +34,7 @@ void printArray(int arr[],int n){
 "s" stands for start
 "e"  stands for end
 */
-void mergeArray(int arr[],int left[],int right[],int s,int e ){
+void mergeArray(int ar r[],int left[],int right[],int s,int e ){
 	int mid = (s+e)/2;
 	int i = s;
 	int j = mid+1;
