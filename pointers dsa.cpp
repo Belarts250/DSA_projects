@@ -1,7 +1,5 @@
 #include <iostream>
 using namespace std;
-//pointers dsa 
-//what are pointers then
 
 
 int main(){
