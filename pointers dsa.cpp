@@ -5,6 +5,8 @@ using namespace std;
 int main(){
 	int a;
 	int b;
+	//explained
+	//done
 	
 	cout << "Enter the first number: ";
 	cin >> a;
