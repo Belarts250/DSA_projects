@@ -16,8 +16,7 @@ void displayEmployees(Employee** employees, int size) {
              << endl;
     }
 }
-//omg
-//wqi
+
 int main() {
  
     Employee employees[5] = {
