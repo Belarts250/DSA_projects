@@ -7,7 +7,7 @@ struct Employee {
     string name;
     double salary;
 };
-
+//display the employee details
 
 void displayEmployees(Employee** employees, int size) {
     for (int i = 0; i < size; i++) {
