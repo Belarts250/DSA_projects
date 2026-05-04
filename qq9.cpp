@@ -17,7 +17,7 @@ void displayEmployees(Employee** employees, int size) {
              << endl;
     }
 }
-
+//main function to create employee objects and display their details
 
 int main() {
  
