@@ -28,8 +28,7 @@ int main() {
         {4, "Diana", 4000.20},
         {5, "keza", 2700.10}
     };
-    //object pointers to store the addresses of employee objects
-
+ 
     Employee* empPtrs[5];
 
 
