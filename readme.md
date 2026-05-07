@@ -36,15 +36,11 @@ Folder Structure
 DSA/
 │
 ├── arrays/
-├── strings/
-├── linked-lists/
-├── stacks/
-├── queues/
-├── trees/
-├── graphs/
+├── stacksAndQueues/
+├── treesAndGraphs/ 
 ├── sorting/
-├── searching/
-└── dynamic-programming/
+├── oop/
+└── pointers/
 Learning Approach
 
 Each lesson should include:
