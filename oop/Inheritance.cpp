@@ -9,7 +9,7 @@ class Car{
 	string brand;
 	
 	virtual void start(){
-		cout << "Hello I am a car ???"<< endl;
+		cout << "Hello, I am a car"<< endl;
 	}
 };
 
@@ -18,7 +18,7 @@ class RwandaCar : public Car {
 	string country;
 	
 	void start() override{
-		cout << "Hi again I'm Lambo??? " << endl;
+		cout << "Hi again I'm Lambo from Rwanda " << endl;
 	}
 };
 
@@ -26,7 +26,7 @@ int main(){
 	
 	RwandaCar car1;
 	car1.object = "car" ;
-	car1.brand = "Lamborhiniiii";
+	car1.brand = "Lamborghini";
 	car1.country = "Rwanda";
 	car1.start();
 	
