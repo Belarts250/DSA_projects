@@ -12,8 +12,7 @@ class Car{
 		cout << "Hello, I am a car"<< endl;
 	}
 };
-
-// RwandaCar  
+  
 class RwandaCar : public Car {
 	public:
 	string country;
