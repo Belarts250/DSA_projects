@@ -13,7 +13,7 @@ class Car{
 	}
 };
 
-// RwandaCar is a child class of Car,
+// RwandaCar  a child class of Car,
 class RwandaCar : public Car {
 	public:
 	string country;
