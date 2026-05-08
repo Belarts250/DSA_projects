@@ -13,7 +13,7 @@ class Car{
 	}
 };
 
-// RwandaCar  a of Car,
+// RwandaCar  a of 
 class RwandaCar : public Car {
 	public:
 	string country;
