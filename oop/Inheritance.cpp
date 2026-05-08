@@ -13,7 +13,7 @@ class Car{
 	}
 };
 
-// RwandaCar is a child class of Car, it inherits all the properties and methods 
+// RwandaCar is a child class of Car, it inherits all the properties and 
 class RwandaCar : public Car {
 	public:
 	string country;
