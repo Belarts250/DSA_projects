@@ -12,7 +12,7 @@ class Car{
 		cout << "Hello, I am a car"<< endl;
 	}
 };
-//car is a  class of car, it all 
+//car is a  class of car, 
 class RwandaCar : public Car {
 	public:
 	string country;
