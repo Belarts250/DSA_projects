@@ -12,7 +12,7 @@ class Car{
 		cout << "Hello, I am a car"<< endl;
 	}
 };
-  
+//rwanda car is a child class of car, it inherits all the properties and methods of the car class  
 class RwandaCar : public Car {
 	public:
 	string country;
