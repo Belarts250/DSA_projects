@@ -12,7 +12,7 @@ class Car{
 		cout << "Hello, I am a car"<< endl;
 	}
 };
-//car is a child class of car, it all the  and methods of the 
+//car is a child class of car, it all the  and  of the 
 class RwandaCar : public Car {
 	public:
 	string country;
