@@ -1,6 +1,6 @@
 #include<iostream>
 using namespace std;
-//car class for creating a car 
+//car class for  a car 
 class Car{
 	
 	public: 
