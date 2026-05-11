@@ -1,6 +1,6 @@
 #include<iostream>
 using namespace std;
-
+//car class for creating a car object
 class Car{
 	
 	public: 
@@ -12,7 +12,7 @@ class Car{
 		cout << "Hello, I am a car"<< endl;
 	}
 };
-
+//
 class RwandaCar : public Car {
 	public:
 	string country;
