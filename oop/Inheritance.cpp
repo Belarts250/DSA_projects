@@ -30,7 +30,7 @@ int main(){
 	car1.country = "Rwanda";
 	car1.start();
 	
-	//
+	//prints me now
 	cout << "I am a " << car1.object << endl;
 	cout << "I am a brand of " << car1.brand << endl;
 	cout << "I am from " << car1.country << endl;
