@@ -24,3 +24,11 @@ void bfs(int root){
     cout << endl;
 
 }
+
+int main(){
+    int n;
+    cin >> n; // number of nodes
+
+    int edges;
+    cin >> edges; // number of edges
+}
