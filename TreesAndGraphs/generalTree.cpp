@@ -31,4 +31,11 @@ int main(){
 
     int edges;
     cin >> edges; 
+
+    for(int i = 0; i < edges; i++){
+        int u, v;
+
+        cin >> u >> v; // parent-child relationship
+        tree[u].push_back(v);
+    }
 }
