@@ -30,5 +30,5 @@ int main(){
     cin >> n; // number of nodes
 
     int edges;
-    cin >> edges; // number of edges
+    cin >> edges; 
 }
