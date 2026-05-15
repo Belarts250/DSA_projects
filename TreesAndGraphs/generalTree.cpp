@@ -38,4 +38,7 @@ int main(){
         cin >> u >> v; // parent-child relationship
         tree[u].push_back(v);
     }
+
+    bfs(1);
+    return 0;
 }
