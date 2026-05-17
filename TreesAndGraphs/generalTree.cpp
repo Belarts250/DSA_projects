@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const int N = 100; // maximum number 
+const int N = 100; // maximum 
 vector<int> tree[N];
 
 void bfs(int root){
