@@ -27,7 +27,7 @@ void bfs(int root){
 
 int main(){
     int n;
-    cin >> n; // number of nodes
+    cin >> n; // number of nod
 
     int edges;
     cin >> edges; 
