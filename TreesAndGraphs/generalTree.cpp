@@ -27,7 +27,7 @@ void bfs(int root){
 
 int main(){
     int n;
-    cin >> n; // number 
+    cin >> n; // num
 
     int edges;
     cin >> edges; 
