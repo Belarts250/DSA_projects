@@ -35,7 +35,7 @@ int main(){
     for(int i = 0; i < edges; i++){
         int u, v;
 
-        cin >> u >> v; // 
+        cin >> u >> v; 
         tree[u].push_back(v);
     }
 
