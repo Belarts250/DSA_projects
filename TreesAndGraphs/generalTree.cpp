@@ -28,7 +28,7 @@ void bfs(int root){
 int main(){
     int n;
     cin >> n;
-    //define the tree using
+    //define the tree 
 
     int edges;
     cin >> edges; 
