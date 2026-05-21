@@ -50,3 +50,10 @@ bool search(BST* root, int key){
     }
     return false;
 }
+
+BST* findMin (BST* root){
+    while(root -> left ! = NULL){
+        root = root -> left;
+    }
+    return root;
+}
