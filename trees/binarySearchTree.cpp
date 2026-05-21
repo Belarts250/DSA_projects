@@ -7,9 +7,22 @@ class BST{
     BST* left;
     BST* right;
 
-    BST(int data){
-        data = data;
+    BST(int value){
+        data = value;
         left = NULL;
         right = NULL;
+    }
+
+};
+
+//Insert
+
+BST* insert(BST* root, int value){
+    if (root == NULL){
+       return new BST(value);
+    }
+
+    if(value < root -> data ){
+        left -> data = insert(root->left, value);
     }
 }
