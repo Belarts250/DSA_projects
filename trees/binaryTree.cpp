@@ -18,4 +18,8 @@ class BTNode{
         delete left;
         delete right;
     }
+
+    int main(){
+        
+    }
 }
