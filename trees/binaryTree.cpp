@@ -25,5 +25,6 @@ class BTNode{
        BTNode<int>* node2 = new BTNode<int>(3);
 
        root -> left = node1;
+       root -> right = node2;
     }
 }
