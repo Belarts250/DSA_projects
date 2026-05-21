@@ -1,0 +1,1467 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Trees — Full Course</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #141720;
+    --surface2: #1c2030;
+    --border: #252a3a;
+    --accent: #4fffb0;
+    --accent2: #7c6bff;
+    --accent3: #ff6b6b;
+    --accent4: #ffd166;
+    --text: #e8eaf0;
+    --muted: #7a8099;
+    --code-bg: #0a0c12;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+  /* LAYOUT */
+  .app { display: flex; height: 100vh; }
+  .sidebar { width: 280px; background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; flex-shrink: 0; display: flex; flex-direction: column; }
+  .main { flex: 1; overflow-y: auto; }
+
+  /* SIDEBAR */
+  .sidebar-header { padding: 24px 20px 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-title { font-size: 13px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
+  .sidebar-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .sidebar-section { padding: 12px 16px 4px; font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; cursor: pointer; font-size: 13px; color: var(--muted); transition: all 0.15s; border-left: 3px solid transparent; }
+  .nav-item:hover { color: var(--text); background: var(--surface2); }
+  .nav-item.active { color: var(--accent); background: rgba(79,255,176,0.06); border-left-color: var(--accent); }
+  .nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* CONTENT */
+  .content { max-width: 900px; margin: 0 auto; padding: 40px 40px 80px; }
+  .lesson-header { margin-bottom: 36px; }
+  .lesson-tag { display: inline-block; background: rgba(79,255,176,0.12); color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 14px; }
+  .lesson-title { font-size: 36px; font-weight: 800; line-height: 1.1; }
+  .lesson-title span { color: var(--accent); }
+  .lesson-subtitle { font-size: 15px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+  .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent2); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card-title::before { content: ''; width: 3px; height: 16px; background: var(--accent2); border-radius: 2px; display: block; }
+
+  /* PROSE */
+  .prose { font-size: 15px; line-height: 1.8; color: #c0c8e0; }
+  .prose p { margin-bottom: 14px; }
+  .prose strong { color: var(--text); font-weight: 700; }
+  .prose em { color: var(--accent4); font-style: italic; }
+
+  /* INSIGHT BOX */
+  .insight { background: rgba(124,107,255,0.08); border: 1px solid rgba(124,107,255,0.25); border-radius: 10px; padding: 18px 20px; margin: 18px 0; display: flex; gap: 14px; }
+  .insight-icon { font-size: 20px; flex-shrink: 0; }
+  .insight-text { font-size: 14px; line-height: 1.7; color: #c0c8f8; }
+  .insight-text strong { color: #a9a0ff; }
+
+  .warn-box { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.25); border-radius: 10px; padding: 16px 20px; margin: 18px 0; display: flex; gap: 14px; font-size: 14px; color: #ffb3b3; line-height: 1.7; }
+
+  .tip-box { background: rgba(255,209,102,0.08); border: 1px solid rgba(255,209,102,0.25); border-radius: 10px; padding: 16px 20px; margin: 18px 0; font-size: 14px; color: #ffe599; line-height: 1.7; }
+  .tip-box strong { color: var(--accent4); }
+
+  /* CODE */
+  .code-block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 18px 0; }
+  .code-header { background: var(--surface2); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .code-lang { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+  .copy-btn { background: none; border: 1px solid var(--border); color: var(--muted); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: 'Syne', sans-serif; transition: all 0.15s; }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  pre { padding: 20px; overflow-x: auto; }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7; color: #d4daf5; }
+  .kw { color: #c792ea; }
+  .fn { color: #82aaff; }
+  .str { color: #c3e88d; }
+  .cm { color: #546e7a; font-style: italic; }
+  .num { color: #f78c6c; }
+  .type { color: #4fffb0; }
+
+  /* TERMINOLOGY GRID */
+  .term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin: 18px 0; }
+  .term-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .term-name { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .term-def { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* EXAM QUESTIONS */
+  .exam-section { background: rgba(79,255,176,0.04); border: 1px solid rgba(79,255,176,0.15); border-radius: 12px; padding: 24px; margin: 24px 0; }
+  .exam-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .q-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .q-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .q-num { display: inline-block; background: var(--accent2); color: white; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-bottom: 8px; }
+  .q-text { font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 8px; }
+  .q-ans { font-size: 13px; color: var(--muted); line-height: 1.6; cursor: pointer; display: flex; align-items: flex-start; gap: 8px; }
+  .q-ans::before { content: '▶ Show Answer'; color: var(--accent4); font-size: 11px; font-weight: 700; flex-shrink: 0; white-space: nowrap; margin-top: 1px; }
+  .q-ans.open::before { content: '▼ Answer:'; }
+  .q-ans-text { display: none; }
+  .q-ans.open .q-ans-text { display: block; color: #9ab0ff; }
+
+  /* TRAVERSAL VISUAL */
+  .traversal-box { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 18px 0; }
+  .trav-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .trav-name { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .trav-rule { font-size: 12px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+  .trav-seq { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent4); }
+
+  /* COMPLEXITY TABLE */
+  .table-wrap { overflow-x: auto; margin: 18px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--surface2); padding: 10px 16px; text-align: left; color: var(--accent); font-weight: 700; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+  td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted); }
+  tr:hover td { background: var(--surface2); color: var(--text); }
+  .good { color: #4fffb0; }
+  .mid { color: var(--accent4); }
+  .bad { color: var(--accent3); }
+
+  /* NAV BUTTONS */
+  .nav-btns { display: flex; gap: 12px; margin-top: 40px; }
+  .btn { padding: 12px 24px; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s; border: none; }
+  .btn-prev { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  .btn-prev:hover { color: var(--text); border-color: var(--text); }
+  .btn-next { background: var(--accent); color: #000; }
+  .btn-next:hover { background: #6fffbf; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* TREE DIAGRAM */
+  .tree-svg-wrap { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 18px 0; display: flex; justify-content: center; overflow-x: auto; }
+  svg text { font-family: 'JetBrains Mono', monospace; }
+
+  /* PROGRESS */
+  .progress-bar { height: 3px; background: var(--border); position: sticky; top: 0; z-index: 10; }
+  .progress-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+
+  /* HIDDEN */
+  .lesson-page { display: none; }
+  .lesson-page.active { display: block; }
+
+  /* BADGE */
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+  .badge-green { background: rgba(79,255,176,0.15); color: var(--accent); }
+  .badge-blue { background: rgba(124,107,255,0.15); color: var(--accent2); }
+  .badge-red { background: rgba(255,107,107,0.15); color: var(--accent3); }
+  .badge-yellow { background: rgba(255,209,102,0.15); color: var(--accent4); }
+
+  @media (max-width: 768px) {
+    .sidebar { width: 220px; }
+    .content { padding: 24px 20px 60px; }
+    .lesson-title { font-size: 26px; }
+    .traversal-box { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">DSA Trees</div>
+      <div class="sidebar-sub">C++ — Complete Course</div>
+    </div>
+
+    <div class="sidebar-section">Foundations</div>
+    <div class="nav-item active" onclick="showLesson(0)" id="nav-0">
+      <div class="nav-dot" style="background:#4fffb0"></div>What is a Tree?
+    </div>
+    <div class="nav-item" onclick="showLesson(1)" id="nav-1">
+      <div class="nav-dot" style="background:#4fffb0"></div>Tree Terminology
+    </div>
+    <div class="nav-item" onclick="showLesson(2)" id="nav-2">
+      <div class="nav-dot" style="background:#4fffb0"></div>Tree vs Linked List
+    </div>
+
+    <div class="sidebar-section">Implementation</div>
+    <div class="nav-item" onclick="showLesson(3)" id="nav-3">
+      <div class="nav-dot" style="background:#7c6bff"></div>General Tree in C++
+    </div>
+    <div class="nav-item" onclick="showLesson(4)" id="nav-4">
+      <div class="nav-dot" style="background:#7c6bff"></div>Level Order Input
+    </div>
+    <div class="nav-item" onclick="showLesson(5)" id="nav-5">
+      <div class="nav-dot" style="background:#7c6bff"></div>Count, Height, Leaves
+    </div>
+
+    <div class="sidebar-section">Binary Trees</div>
+    <div class="nav-item" onclick="showLesson(6)" id="nav-6">
+      <div class="nav-dot" style="background:#ffd166"></div>Binary Tree Basics
+    </div>
+    <div class="nav-item" onclick="showLesson(7)" id="nav-7">
+      <div class="nav-dot" style="background:#ffd166"></div>Traversals (In/Pre/Post)
+    </div>
+    <div class="nav-item" onclick="showLesson(8)" id="nav-8">
+      <div class="nav-dot" style="background:#ffd166"></div>Level Order Traversal
+    </div>
+    <div class="nav-item" onclick="showLesson(9)" id="nav-9">
+      <div class="nav-dot" style="background:#ffd166"></div>Delete Tree / Destructor
+    </div>
+
+    <div class="sidebar-section">BST & Types</div>
+    <div class="nav-item" onclick="showLesson(10)" id="nav-10">
+      <div class="nav-dot" style="background:#ff6b6b"></div>Binary Search Tree
+    </div>
+    <div class="nav-item" onclick="showLesson(11)" id="nav-11">
+      <div class="nav-dot" style="background:#ff6b6b"></div>BST Operations (C++)
+    </div>
+    <div class="nav-item" onclick="showLesson(12)" id="nav-12">
+      <div class="nav-dot" style="background:#ff6b6b"></div>Types of Binary Trees
+    </div>
+
+    <div class="sidebar-section">Exam Prep</div>
+    <div class="nav-item" onclick="showLesson(13)" id="nav-13">
+      <div class="nav-dot" style="background:#4fffb0"></div>🎯 Exam Q&A
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:7%"></div></div>
+    <div class="content">
+
+      <!-- ===== LESSON 0: WHAT IS A TREE ===== -->
+      <div class="lesson-page active" id="lesson-0">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 1 · Foundations</div>
+          <h1 class="lesson-title">What is a <span>Tree</span>?</h1>
+          <p class="lesson-subtitle">A tree is a non-linear hierarchical data structure — a connected acyclic graph.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Core Definition</div>
+          <div class="prose">
+            <p>A <strong>tree</strong> is an abstract data type (ADT) that stores elements <em>hierarchically</em>. It is a connected, acyclic (no cycles) collection of nodes and edges.</p>
+            <p>With the exception of the top element (the root), every element has exactly one <strong>parent</strong> and zero or more <strong>children</strong>.</p>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">🌳</div>
+            <div class="insight-text"><strong>Key insight:</strong> Unlike arrays, linked lists, stacks or queues (all linear), trees let you model real-world hierarchies — file systems, org charts, expression trees, HTML DOM. Linear structures can only express "before/after" — trees express "above/below".</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Why Not Linear Structures?</div>
+          <div class="prose">
+            <p>Linear structures like arrays, linked lists, stacks and queues store data <em>sequentially</em>. Operations take O(n) time as data grows — not acceptable in modern systems.</p>
+            <p>Trees allow <strong>quicker access</strong> and power critical algorithms in:</p>
+            <ul style="margin-left:20px;margin-top:10px;line-height:2;color:#c0c8e0">
+              <li>File systems (directories & files)</li>
+              <li>Graphical User Interfaces</li>
+              <li>Databases (B-trees, indexing)</li>
+              <li>Websites (DOM)</li>
+              <li>Compilers (syntax trees)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Real-World Scenarios</div>
+          <div class="prose">
+            <p><strong>Scenario 1 — File System:</strong> Root directory → sub-directories → files. You can't model this in an array.</p>
+            <p><strong>Scenario 2 — Company Hierarchy:</strong> CEO → CTO, CFO, CMO → their subordinates. Perfect tree structure.</p>
+            <p><strong>Scenario 3 — Family Tree:</strong> The main terminology (parent, child, ancestor, descendant) literally comes from family trees.</p>
+          </div>
+        </div>
+
+        <div class="tree-svg-wrap">
+          <svg width="420" height="200" viewBox="0 0 420 200">
+            <defs>
+              <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="#4fffb0" opacity="0.5"/>
+              </marker>
+            </defs>
+            <!-- edges -->
+            <line x1="210" y1="40" x2="105" y2="110" stroke="#4fffb0" stroke-width="1.5" opacity="0.4"/>
+            <line x1="210" y1="40" x2="210" y2="110" stroke="#4fffb0" stroke-width="1.5" opacity="0.4"/>
+            <line x1="210" y1="40" x2="315" y2="110" stroke="#4fffb0" stroke-width="1.5" opacity="0.4"/>
+            <line x1="105" y1="110" x2="60" y2="175" stroke="#7c6bff" stroke-width="1.5" opacity="0.4"/>
+            <line x1="105" y1="110" x2="150" y2="175" stroke="#7c6bff" stroke-width="1.5" opacity="0.4"/>
+            <line x1="315" y1="110" x2="280" y2="175" stroke="#7c6bff" stroke-width="1.5" opacity="0.4"/>
+            <line x1="315" y1="110" x2="355" y2="175" stroke="#7c6bff" stroke-width="1.5" opacity="0.4"/>
+            <!-- nodes -->
+            <circle cx="210" cy="36" r="22" fill="#1c2030" stroke="#4fffb0" stroke-width="2"/>
+            <text x="210" y="41" text-anchor="middle" fill="#4fffb0" font-size="12" font-weight="bold">CEO</text>
+            <circle cx="105" cy="110" r="22" fill="#1c2030" stroke="#7c6bff" stroke-width="2"/>
+            <text x="105" y="115" text-anchor="middle" fill="#7c6bff" font-size="10" font-weight="bold">CTO</text>
+            <circle cx="210" cy="110" r="22" fill="#1c2030" stroke="#7c6bff" stroke-width="2"/>
+            <text x="210" y="115" text-anchor="middle" fill="#7c6bff" font-size="10" font-weight="bold">CFO</text>
+            <circle cx="315" cy="110" r="22" fill="#1c2030" stroke="#7c6bff" stroke-width="2"/>
+            <text x="315" y="115" text-anchor="middle" fill="#7c6bff" font-size="10" font-weight="bold">CMO</text>
+            <circle cx="60" cy="175" r="18" fill="#1c2030" stroke="#ffd166" stroke-width="1.5"/>
+            <text x="60" y="180" text-anchor="middle" fill="#ffd166" font-size="9">Dev1</text>
+            <circle cx="150" cy="175" r="18" fill="#1c2030" stroke="#ffd166" stroke-width="1.5"/>
+            <text x="150" y="180" text-anchor="middle" fill="#ffd166" font-size="9">Dev2</text>
+            <circle cx="280" cy="175" r="18" fill="#1c2030" stroke="#ffd166" stroke-width="1.5"/>
+            <text x="280" y="180" text-anchor="middle" fill="#ffd166" font-size="9">Mkt1</text>
+            <circle cx="355" cy="175" r="18" fill="#1c2030" stroke="#ffd166" stroke-width="1.5"/>
+            <text x="355" y="180" text-anchor="middle" fill="#ffd166" font-size="9">Mkt2</text>
+          </svg>
+        </div>
+
+        <div class="tip-box"><strong>Mnemonics to remember:</strong> Think of it as an upside-down real tree. Root is at the TOP. Leaves are at the BOTTOM. Relationships are PARENT → CHILD going downward.</div>
+
+        <div class="nav-btns">
+          <button class="btn btn-next" onclick="showLesson(1)">Next: Tree Terminology →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 1: TERMINOLOGY ===== -->
+      <div class="lesson-page" id="lesson-1">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 2 · Foundations</div>
+          <h1 class="lesson-title">Tree <span>Terminology</span></h1>
+          <p class="lesson-subtitle">Every term you must know — with precise definitions.</p>
+        </div>
+
+        <div class="term-grid">
+          <div class="term-card">
+            <div class="term-name">Node</div>
+            <div class="term-def">Entity holding a value + pointers to children. Last nodes (no children) = leaf/external nodes.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Root</div>
+            <div class="term-def">Topmost node. Has NO parent. Every traversal starts here.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Edge</div>
+            <div class="term-def">Link between two nodes. A tree with n nodes has exactly n-1 edges.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Leaf / External Node</div>
+            <div class="term-def">Node with NO children. No outgoing edges below it.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Internal Node</div>
+            <div class="term-def">Node with at least one child. All non-leaf nodes.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Parent</div>
+            <div class="term-def">Node that has a branch going to another node below it.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Sibling</div>
+            <div class="term-def">Nodes sharing the same parent. At same level, same branch.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Ancestor</div>
+            <div class="term-def">Parent, grandparent, great-grandparent, etc. going UP the tree.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Descendant</div>
+            <div class="term-def">Children, grandchildren, etc. going DOWN from a node.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Depth of Node</div>
+            <div class="term-def">Number of edges from ROOT to the node. Root depth = 0.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Height of Node</div>
+            <div class="term-def">Number of edges from node to deepest leaf BELOW it.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Height of Tree</div>
+            <div class="term-def">Height of the root = depth of deepest node in tree.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Level</div>
+            <div class="term-def">Root = Level 0. Its children = Level 1. Increments by 1 each step down.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Subtree</div>
+            <div class="term-def">A node v plus ALL its descendants. Any node can be the root of a subtree.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Forest</div>
+            <div class="term-def">Collection of DISJOINT trees. Remove the root of a tree → you get a forest of subtrees.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Path</div>
+            <div class="term-def">Sequence of nodes where every consecutive pair forms an edge.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Height vs Depth — The Classic Confusion</div>
+          <div class="prose">
+            <p><strong>Depth</strong> is measured from the ROOT downward. <strong>Height</strong> is measured from the node upward to the deepest leaf.</p>
+            <p>For a leaf node: height = 0, depth = distance from root.</p>
+            <p>For the root: depth = 0, height = height of the whole tree.</p>
+          </div>
+          <div class="warn-box">⚠️ <strong>Exam trap:</strong> Height of a single node = 0 (some books say 1). Know which convention your course uses. The slides use: height = number of <em>edges</em> to deepest leaf (so single node = 0).</div>
+        </div>
+
+        <div class="tree-svg-wrap">
+          <svg width="460" height="220" viewBox="0 0 460 220">
+            <!-- labels left -->
+            <text x="8" y="48" fill="#ffd166" font-size="10">Level 0 (Depth 0)</text>
+            <text x="8" y="118" fill="#ffd166" font-size="10">Level 1 (Depth 1)</text>
+            <text x="8" y="188" fill="#ffd166" font-size="10">Level 2 (Depth 2)</text>
+            <!-- edges -->
+            <line x1="270" y1="44" x2="200" y2="110" stroke="#4fffb0" stroke-width="1.5" opacity="0.4"/>
+            <line x1="270" y1="44" x2="340" y2="110" stroke="#4fffb0" stroke-width="1.5" opacity="0.4"/>
+            <line x1="200" y1="110" x2="165" y2="178" stroke="#7c6bff" stroke-width="1.5" opacity="0.4"/>
+            <line x1="200" y1="110" x2="235" y2="178" stroke="#7c6bff" stroke-width="1.5" opacity="0.4"/>
+            <line x1="340" y1="110" x2="310" y2="178" stroke="#7c6bff" stroke-width="1.5" opacity="0.4"/>
+            <!-- nodes -->
+            <circle cx="270" cy="40" r="24" fill="#1c2030" stroke="#4fffb0" stroke-width="2"/>
+            <text x="270" y="36" text-anchor="middle" fill="#4fffb0" font-size="11" font-weight="bold">A</text>
+            <text x="270" y="50" text-anchor="middle" fill="#546e7a" font-size="9">root</text>
+            <circle cx="200" cy="110" r="24" fill="#1c2030" stroke="#7c6bff" stroke-width="2"/>
+            <text x="200" y="106" text-anchor="middle" fill="#7c6bff" font-size="11" font-weight="bold">B</text>
+            <text x="200" y="120" text-anchor="middle" fill="#546e7a" font-size="9">internal</text>
+            <circle cx="340" cy="110" r="24" fill="#1c2030" stroke="#7c6bff" stroke-width="2"/>
+            <text x="340" y="106" text-anchor="middle" fill="#7c6bff" font-size="11" font-weight="bold">C</text>
+            <text x="340" y="120" text-anchor="middle" fill="#546e7a" font-size="9">internal</text>
+            <circle cx="165" cy="178" r="24" fill="#1c2030" stroke="#ff6b6b" stroke-width="2"/>
+            <text x="165" y="174" text-anchor="middle" fill="#ff6b6b" font-size="11" font-weight="bold">D</text>
+            <text x="165" y="188" text-anchor="middle" fill="#546e7a" font-size="9">leaf</text>
+            <circle cx="235" cy="178" r="24" fill="#1c2030" stroke="#ff6b6b" stroke-width="2"/>
+            <text x="235" y="174" text-anchor="middle" fill="#ff6b6b" font-size="11" font-weight="bold">E</text>
+            <text x="235" y="188" text-anchor="middle" fill="#546e7a" font-size="9">leaf</text>
+            <circle cx="310" cy="178" r="24" fill="#1c2030" stroke="#ff6b6b" stroke-width="2"/>
+            <text x="310" y="174" text-anchor="middle" fill="#ff6b6b" font-size="11" font-weight="bold">F</text>
+            <text x="310" y="188" text-anchor="middle" fill="#546e7a" font-size="9">leaf</text>
+            <!-- annotations -->
+            <text x="400" y="48" fill="#ffd166" font-size="10">Height=2</text>
+            <text x="400" y="115" fill="#ffd166" font-size="10">Height=1</text>
+            <text x="400" y="185" fill="#ffd166" font-size="10">Height=0</text>
+          </svg>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(0)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(2)">Next: Tree vs Linked List →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 2: TREE VS LINKED LIST ===== -->
+      <div class="lesson-page" id="lesson-2">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 3 · Foundations</div>
+          <h1 class="lesson-title">Tree vs <span>Linked List</span></h1>
+          <p class="lesson-subtitle">They share DNA — but trees are the evolved form.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">The Connection</div>
+          <div class="prose">
+            <p>A tree has common behaviour with a Linked List because:</p>
+            <ul style="margin-left:20px;margin-top:10px;line-height:2;color:#c0c8e0">
+              <li>In a <strong>linked list</strong> we need to know the <em>head</em> — from head we traverse everything.</li>
+              <li>In a <strong>tree</strong> we need to know the <em>root</em> — from root we traverse everything.</li>
+            </ul>
+            <p style="margin-top:14px">The fundamental difference: in a singly linked list each node stores a link to <em>one</em> node. In a tree, each node stores addresses of <em>many</em> nodes (its children).</p>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <tr><th>Property</th><th>Singly Linked List</th><th>Tree</th></tr>
+            <tr><td>Structure</td><td>Linear</td><td>Hierarchical</td></tr>
+            <tr><td>Entry point</td><td>Head pointer</td><td>Root pointer</td></tr>
+            <tr><td>Node children</td><td>1 (next)</td><td>0 to many</td></tr>
+            <tr><td>Cycles</td><td>Possible (circular LL)</td><td>Never (acyclic by definition)</td></tr>
+            <tr><td>Search</td><td class="bad">O(n)</td><td class="good">O(log n) in balanced</td></tr>
+            <tr><td>Parent pointer</td><td>None (singly)</td><td>Implicit (you know who called you)</td></tr>
+          </table>
+        </div>
+
+        <div class="insight">
+          <div class="insight-icon">💡</div>
+          <div class="insight-text"><strong>Think of it this way:</strong> A linked list is a degenerate tree where every node has exactly one child. A tree is the generalization. That's why the C++ node code looks very similar — just replace <code style="color:#4fffb0">next*</code> with <code style="color:#4fffb0">vector&lt;Node*&gt; children</code>.</div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(1)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(3)">Next: General Tree in C++ →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 3: GENERAL TREE C++ ===== -->
+      <div class="lesson-page" id="lesson-3">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 4 · Implementation</div>
+          <h1 class="lesson-title">General <span>Tree</span> in C++</h1>
+          <p class="lesson-subtitle">Node design, construction, and recursive printing.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">The TreeNode Class</div>
+          <div class="prose"><p>We use a template class so the tree can hold any data type. Each node holds its data and a <code style="color:#4fffb0">vector</code> of pointers to its children.</p></div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — TreeNode</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="cm">// ── TreeNode class ──────────────────────────────────</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="type">T</span>&gt;
+<span class="kw">class</span> <span class="type">TreeNode</span> {
+<span class="kw">public</span>:
+    <span class="type">T</span> data;
+    vector&lt;<span class="type">TreeNode</span>&lt;<span class="type">T</span>&gt;*&gt; children;   <span class="cm">// unlimited children</span>
+
+    <span class="fn">TreeNode</span>(<span class="type">T</span> data) {
+        <span class="kw">this</span>->data = data;
+    }
+
+    <span class="cm">// Destructor: recursively delete all children</span>
+    ~<span class="fn">TreeNode</span>() {
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; children.<span class="fn">size</span>(); i++) {
+            <span class="kw">delete</span> children[i];   <span class="cm">// calls child destructor recursively</span>
+        }
+    }
+};</code></pre>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">🔑</div>
+            <div class="insight-text"><strong>Why vector&lt;TreeNode*&gt;?</strong> Because we don't know at compile time how many children each node will have. A vector lets us dynamically add any number of child pointers. This is what makes it a <em>general</em> tree (not limited to 2 children like Binary Trees).</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Print Tree Recursively</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — printTree</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">void</span> <span class="fn">printTree</span>(<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>) <span class="kw">return</span>;  <span class="cm">// base case / edge case</span>
+
+    cout &lt;&lt; root->data &lt;&lt; <span class="str">": "</span>;
+
+    <span class="cm">// Print all children on same line</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; root->children.<span class="fn">size</span>(); i++) {
+        cout &lt;&lt; root->children[i]->data &lt;&lt; <span class="str">" ,"</span>;
+    }
+    cout &lt;&lt; endl;
+
+    <span class="cm">// Recursively print each child's subtree</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; root->children.<span class="fn">size</span>(); i++) {
+        <span class="fn">printTree</span>(root->children[i]);
+    }
+}</code></pre>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">🔁</div>
+            <div class="insight-text"><strong>Recursion pattern:</strong> Base case first (NULL check). Then do work on current node. Then recurse on children. This is <em>preorder</em> style — process node BEFORE children. Almost all tree recursive functions follow this pattern.</div>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(2)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(4)">Next: Level Order Input →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 4: LEVEL ORDER INPUT ===== -->
+      <div class="lesson-page" id="lesson-4">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 5 · Implementation</div>
+          <h1 class="lesson-title">Level Order <span>Input & Print</span></h1>
+          <p class="lesson-subtitle">How to build a tree from user input using a queue — and print it level by level.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Taking Input Level-Wise (General Tree)</div>
+          <div class="prose"><p>We use a <strong>queue</strong> to process nodes level by level. For each node we dequeue, we ask the user how many children it has, then create those children and enqueue them for future processing.</p></div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — takeInputLevelWise</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* <span class="fn">takeInputLevelWise</span>() {
+    <span class="kw">int</span> rootData;
+    cout &lt;&lt; <span class="str">"Enter root data: "</span>;
+    cin &gt;&gt; rootData;
+
+    <span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* root = <span class="kw">new</span> <span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;(rootData);
+    queue&lt;<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;*&gt; q;
+    q.<span class="fn">push</span>(root);
+
+    <span class="kw">while</span> (!q.<span class="fn">empty</span>()) {
+        <span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* f = q.<span class="fn">front</span>();
+        q.<span class="fn">pop</span>();
+
+        cout &lt;&lt; <span class="str">"Enter no of children of "</span> &lt;&lt; f->data &lt;&lt; <span class="str">": "</span>;
+        <span class="kw">int</span> n;
+        cin &gt;&gt; n;
+
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {
+            <span class="kw">int</span> childData;
+            cout &lt;&lt; <span class="str">"Enter child "</span> &lt;&lt; i &lt;&lt; <span class="str">" of "</span> &lt;&lt; f->data &lt;&lt; <span class="str">": "</span>;
+            cin &gt;&gt; childData;
+            <span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* child = <span class="kw">new</span> <span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;(childData);
+            q.<span class="fn">push</span>(child);           <span class="cm">// enqueue for later processing</span>
+            f->children.<span class="fn">push_back</span>(child);  <span class="cm">// connect to parent</span>
+        }
+    }
+    <span class="kw">return</span> root;
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Level Order Print (BFS Print)</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — printTreeLevelWise</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">void</span> <span class="fn">printTreeLevelWise</span>(<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* root) {
+    queue&lt;<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;*&gt; q;
+    q.<span class="fn">push</span>(root);
+    <span class="kw">int</span> counter = <span class="num">0</span>;  <span class="cm">// counts total nodes visited</span>
+
+    <span class="kw">while</span> (!q.<span class="fn">empty</span>()) {
+        <span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* f = q.<span class="fn">front</span>();
+        counter++;
+        q.<span class="fn">pop</span>();
+
+        cout &lt;&lt; f->data &lt;&lt; <span class="str">": "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; f->children.<span class="fn">size</span>(); i++) {
+            cout &lt;&lt; f->children[i]->data &lt;&lt; <span class="str">" ,"</span>;
+            q.<span class="fn">push</span>(f->children[i]);   <span class="cm">// enqueue children for next level</span>
+        }
+        cout &lt;&lt; endl;
+    }
+    cout &lt;&lt; <span class="str">"Total nodes: "</span> &lt;&lt; counter &lt;&lt; endl;
+}
+
+<span class="cm">// Key insight: print node FIRST, then enqueue children
+// This guarantees level-by-level output (BFS order)</span></code></pre>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">📦</div>
+            <div class="insight-text"><strong>The Queue is the KEY:</strong> In Level Order / BFS, the queue ensures we process all nodes at depth d BEFORE any node at depth d+1. This is because queue is FIFO — first in, first out. The nodes we enqueue (children) will be processed after all currently queued nodes (siblings of parent).</div>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(3)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(5)">Next: Count, Height, Leaves →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 5: COUNT HEIGHT LEAVES ===== -->
+      <div class="lesson-page" id="lesson-5">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 6 · Implementation</div>
+          <h1 class="lesson-title">Count Nodes, Height <span>&amp; Leaves</span></h1>
+          <p class="lesson-subtitle">Recursive and iterative approaches for 3 critical operations.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Count Nodes — Recursive</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">int</span> <span class="fn">countNodes</span>(<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="num">0</span>;  <span class="cm">// edge case</span>
+
+    <span class="kw">int</span> ans = <span class="num">1</span>;  <span class="cm">// count the current node</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; root->children.<span class="fn">size</span>(); i++) {
+        ans += <span class="fn">countNodes</span>(root->children[i]);  <span class="cm">// add children's counts</span>
+    }
+    <span class="kw">return</span> ans;
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Height of Tree — Recursive</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">int</span> <span class="fn">height</span>(<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="num">0</span>;  <span class="cm">// edge case</span>
+
+    <span class="kw">int</span> mx = <span class="num">0</span>;  <span class="cm">// track max height among children</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; root->children.<span class="fn">size</span>(); i++) {
+        mx = max(mx, <span class="fn">height</span>(root->children[i]));
+    }
+    <span class="kw">return</span> mx + <span class="num">1</span>;  <span class="cm">// +1 for current node's edge to its parent</span>
+}</code></pre>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">📏</div>
+            <div class="insight-text"><strong>Why mx + 1?</strong> The height of a node = the maximum height of any child + 1 (for the edge connecting this node to that child). A leaf has no children → max=0 → height = 0+1 = 1. Wait — the slides use "number of edges to deepest leaf" so a leaf = 0 (no edges below it). Adjust the base case to return -1 if using edge-counting.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Count Leaf Nodes — Recursive &amp; Iterative</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — Recursive</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">int</span> <span class="fn">countLeafNodes</span>(<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="num">0</span>;  <span class="cm">// edge case</span>
+
+    <span class="kw">if</span> (root->children.<span class="fn">size</span>() == <span class="num">0</span>) <span class="kw">return</span> <span class="num">1</span>;  <span class="cm">// IT IS a leaf</span>
+
+    <span class="kw">int</span> ans = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; root->children.<span class="fn">size</span>(); i++) {
+        ans += <span class="fn">countLeafNodes</span>(root->children[i]);
+    }
+    <span class="kw">return</span> ans;
+}</code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — Iterative (BFS)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">int</span> <span class="fn">countLeaves</span>(<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* root) {
+    queue&lt;<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;*&gt; q;
+    q.<span class="fn">push</span>(root);
+    <span class="kw">int</span> leaves = <span class="num">0</span>;
+
+    <span class="kw">while</span> (!q.<span class="fn">empty</span>()) {
+        <span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* f = q.<span class="fn">front</span>();
+        q.<span class="fn">pop</span>();
+
+        <span class="kw">if</span> (f->children.<span class="fn">size</span>() == <span class="num">0</span>) {  <span class="cm">// leaf check</span>
+            leaves++;
+        }
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; f->children.<span class="fn">size</span>(); i++) {
+            q.<span class="fn">push</span>(f->children[i]);
+        }
+    }
+    <span class="kw">return</span> leaves;
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(4)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(6)">Next: Binary Tree Basics →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 6: BINARY TREE ===== -->
+      <div class="lesson-page" id="lesson-6">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 7 · Binary Trees</div>
+          <h1 class="lesson-title">Binary <span>Tree</span> Basics</h1>
+          <p class="lesson-subtitle">Max 2 children per node. The most important tree type in CS.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Definition &amp; Properties</div>
+          <div class="prose">
+            <p>A <strong>Binary Tree</strong> is a tree where every parent node has <em>at most</em> 2 children — a left child and a right child.</p>
+          </div>
+          <div class="term-grid">
+            <div class="term-card">
+              <div class="term-name">Max nodes at level i</div>
+              <div class="term-def">2<sup>i</sup> nodes. Level 0 = 1, Level 1 = 2, Level 2 = 4...</div>
+            </div>
+            <div class="term-card">
+              <div class="term-name">Max nodes at height h</div>
+              <div class="term-def">2<sup>h+1</sup> - 1 total nodes (sum of geometric series)</div>
+            </div>
+            <div class="term-card">
+              <div class="term-name">Min nodes at height h</div>
+              <div class="term-def">h + 1 nodes (a straight line — degenerate)</div>
+            </div>
+            <div class="term-card">
+              <div class="term-name">Min height for n nodes</div>
+              <div class="term-def">⌊log₂(n)⌋ — when tree is maximally full</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">BTNode Class in C++</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — BTNode</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="type">T</span>&gt;
+<span class="kw">class</span> <span class="type">BTNode</span> {
+<span class="kw">public</span>:
+    <span class="type">T</span> data;
+    <span class="type">BTNode</span>* left;   <span class="cm">// pointer to left child (or NULL)</span>
+    <span class="type">BTNode</span>* right;  <span class="cm">// pointer to right child (or NULL)</span>
+
+    <span class="fn">BTNode</span>(<span class="type">T</span> data) {
+        <span class="kw">this</span>->data = data;
+        left = <span class="kw">NULL</span>;
+        right = <span class="kw">NULL</span>;
+    }
+
+    ~<span class="fn">BTNode</span>() {
+        <span class="kw">delete</span> left;   <span class="cm">// recursively deletes left subtree</span>
+        <span class="kw">delete</span> right;  <span class="cm">// recursively deletes right subtree</span>
+    }
+};
+
+<span class="cm">// Creating a simple tree manually:</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;* root = <span class="kw">new</span> <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;(<span class="num">1</span>);
+    <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;* n1   = <span class="kw">new</span> <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;(<span class="num">2</span>);
+    <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;* n2   = <span class="kw">new</span> <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;(<span class="num">3</span>);
+    root->left  = n1;
+    root->right = n2;
+    <span class="kw">delete</span> root;  <span class="cm">// frees entire tree via destructor chain</span>
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Level-Wise Input for Binary Tree</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — takeInputLevelWise (BT)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;* <span class="fn">takeInputLevelWise</span>() {
+    <span class="kw">int</span> rootData;
+    cout &lt;&lt; <span class="str">"Enter root data: "</span>;
+    cin &gt;&gt; rootData;
+    <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;* root = <span class="kw">new</span> <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;(rootData);
+
+    queue&lt;<span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;*&gt; q;
+    q.<span class="fn">push</span>(root);
+
+    <span class="kw">while</span> (!q.<span class="fn">empty</span>()) {
+        <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;* f = q.<span class="fn">front</span>();
+        q.<span class="fn">pop</span>();
+
+        <span class="kw">int</span> leftData;
+        cout &lt;&lt; <span class="str">"Left child of "</span> &lt;&lt; f->data &lt;&lt; <span class="str">" (-1 = none): "</span>;
+        cin &gt;&gt; leftData;
+        <span class="kw">if</span> (leftData != -<span class="num">1</span>) {  <span class="cm">// -1 signals no child</span>
+            <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;* child = <span class="kw">new</span> <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;(leftData);
+            q.<span class="fn">push</span>(child);      <span class="cm">// 1. Create</span>
+            f->left = child;     <span class="cm">// 2. Connect to parent</span>
+        }
+
+        <span class="kw">int</span> rightData;
+        cout &lt;&lt; <span class="str">"Right child of "</span> &lt;&lt; f->data &lt;&lt; <span class="str">" (-1 = none): "</span>;
+        cin &gt;&gt; rightData;
+        <span class="kw">if</span> (rightData != -<span class="num">1</span>) {
+            <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;* child = <span class="kw">new</span> <span class="type">BTNode</span>&lt;<span class="kw">int</span>&gt;(rightData);
+            q.<span class="fn">push</span>(child);
+            f->right = child;
+        }
+    }
+    <span class="kw">return</span> root;
+}
+<span class="cm">// Convention: enter -1 to indicate NULL (no child)</span></code></pre>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(5)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(7)">Next: Traversals →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 7: TRAVERSALS ===== -->
+      <div class="lesson-page" id="lesson-7">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 8 · Binary Trees</div>
+          <h1 class="lesson-title">Tree <span>Traversals</span></h1>
+          <p class="lesson-subtitle">Inorder, Preorder, Postorder — mastered with mnemonics and code.</p>
+        </div>
+
+        <div class="traversal-box">
+          <div class="trav-card">
+            <div class="trav-name" style="color:#4fffb0">Inorder (LDR)</div>
+            <div class="trav-rule">Left → Root → Right<br>Gives SORTED output for BST</div>
+            <div class="trav-seq">4→2→5→1→6→3→7</div>
+          </div>
+          <div class="trav-card">
+            <div class="trav-name" style="color:#7c6bff">Preorder (DLR)</div>
+            <div class="trav-rule">Root → Left → Right<br>Used to COPY a tree</div>
+            <div class="trav-seq">1→2→4→5→3→6→7</div>
+          </div>
+          <div class="trav-card">
+            <div class="trav-name" style="color:#ff6b6b">Postorder (LRD)</div>
+            <div class="trav-rule">Left → Right → Root<br>Used to DELETE a tree</div>
+            <div class="trav-seq">4→5→2→6→7→3→1</div>
+          </div>
+        </div>
+
+        <div class="tip-box"><strong>Mnemonic:</strong> The letter position tells you where the Data (root) goes: in<strong>D</strong>order = middle, <strong>D</strong>LR preorder = first, LR<strong>D</strong> postorder = last.</div>
+
+        <div class="card">
+          <div class="card-title">Complete Traversal Code</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — All 3 Traversals</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="cm">// Inorder: Left → Root → Right</span>
+<span class="kw">void</span> <span class="fn">inorderTraversal</span>(<span class="type">Node</span>* node) {
+    <span class="kw">if</span> (node == <span class="kw">NULL</span>) <span class="kw">return</span>;
+    <span class="fn">inorderTraversal</span>(node->left);
+    cout &lt;&lt; node->data &lt;&lt; <span class="str">"->"</span>;
+    <span class="fn">inorderTraversal</span>(node->right);
+}
+
+<span class="cm">// Preorder: Root → Left → Right</span>
+<span class="kw">void</span> <span class="fn">preorderTraversal</span>(<span class="type">Node</span>* node) {
+    <span class="kw">if</span> (node == <span class="kw">NULL</span>) <span class="kw">return</span>;
+    cout &lt;&lt; node->data &lt;&lt; <span class="str">"->"</span>;
+    <span class="fn">preorderTraversal</span>(node->left);
+    <span class="fn">preorderTraversal</span>(node->right);
+}
+
+<span class="cm">// Postorder: Left → Right → Root</span>
+<span class="kw">void</span> <span class="fn">postorderTraversal</span>(<span class="type">Node</span>* node) {
+    <span class="kw">if</span> (node == <span class="kw">NULL</span>) <span class="kw">return</span>;
+    <span class="fn">postorderTraversal</span>(node->left);
+    <span class="fn">postorderTraversal</span>(node->right);
+    cout &lt;&lt; node->data &lt;&lt; <span class="str">"->"</span>;
+}
+
+<span class="cm">/* For tree: 1->(12,9), 12->(5,6)
+   Inorder:   5->12->6->1->9
+   Preorder:  1->12->5->6->9
+   Postorder: 5->6->12->9->1  */</span></code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Depth-Level Traversal (General Tree — Inorder variant)</div>
+          <div class="prose"><p>For a general tree (not binary), "inorder" visits all children except the last, then prints the node, then visits the last child.</p></div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — General Tree Inorder</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">void</span> <span class="fn">inorder</span>(<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>) <span class="kw">return</span>;
+
+    <span class="kw">int</span> total = root->children.<span class="fn">size</span>();
+
+    <span class="cm">// Visit all children EXCEPT the last</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; total - <span class="num">1</span>; i++)
+        <span class="fn">inorder</span>(root->children[i]);
+
+    <span class="cm">// Print current node</span>
+    cout &lt;&lt; root->data &lt;&lt; <span class="str">" "</span>;
+
+    <span class="cm">// Visit the last child</span>
+    <span class="fn">inorder</span>(root->children[total - <span class="num">1</span>]);
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <tr><th>Traversal</th><th>Order</th><th>Key Use Case</th><th>Time</th></tr>
+            <tr><td>Inorder</td><td>L → D → R</td><td>Get sorted sequence from BST</td><td class="good">O(n)</td></tr>
+            <tr><td>Preorder</td><td>D → L → R</td><td>Copy tree, serialize tree</td><td class="good">O(n)</td></tr>
+            <tr><td>Postorder</td><td>L → R → D</td><td>Delete tree, evaluate expression tree</td><td class="good">O(n)</td></tr>
+            <tr><td>Level Order</td><td>BFS by level</td><td>Find shortest path, level queries</td><td class="good">O(n)</td></tr>
+          </table>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(6)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(8)">Next: Level Order Traversal →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 8: LEVEL ORDER ===== -->
+      <div class="lesson-page" id="lesson-8">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 9 · Binary Trees</div>
+          <h1 class="lesson-title">Level Order <span>Traversal</span></h1>
+          <p class="lesson-subtitle">BFS on a binary tree — using a queue.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Level Order for Binary Tree</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — BFS / Level Order</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">void</span> <span class="fn">levelOrder</span>(<span class="type">Node</span>* node) {
+    <span class="kw">if</span> (!node) <span class="kw">return</span>;
+
+    queue&lt;<span class="type">Node</span>*&gt; q;
+    q.<span class="fn">push</span>(node);
+
+    <span class="kw">while</span> (!q.<span class="fn">empty</span>()) {
+        <span class="type">Node</span>* current = q.<span class="fn">front</span>();
+        q.<span class="fn">pop</span>();
+        cout &lt;&lt; current->data &lt;&lt; <span class="str">" "</span>;
+
+        <span class="kw">if</span> (current->left)
+            q.<span class="fn">push</span>(current->left);
+        <span class="kw">if</span> (current->right)
+            q.<span class="fn">push</span>(current->right);
+    }
+}
+
+<span class="cm">// Tree: 25 at root
+// Output (level by level): 25 15 50 10 22 35 70 4 12 18 24 31 44 69 90</span></code></pre>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">🔄</div>
+            <div class="insight-text"><strong>Algorithm walkthrough:</strong> Push root. Loop: pop front, print it, push its left child (if exists), push its right child (if exists). The FIFO queue guarantees we process level 0 before level 1, level 1 before level 2, etc.</div>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(7)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(9)">Next: Delete Tree →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 9: DELETE ===== -->
+      <div class="lesson-page" id="lesson-9">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 10 · Binary Trees</div>
+          <h1 class="lesson-title">Delete Tree &amp; <span>Destructors</span></h1>
+          <p class="lesson-subtitle">Memory management — postorder is the only safe deletion order.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Why Postorder for Deletion?</div>
+          <div class="prose"><p>You must delete children BEFORE the parent. If you delete the parent first, you lose the pointers to the children → <strong>memory leak</strong>. Postorder (L → R → Root) ensures children are always deleted before their parent.</p></div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — deleteTree (General)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="kw">void</span> <span class="fn">deleteTree</span>(<span class="type">TreeNode</span>&lt;<span class="kw">int</span>&gt;* root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>) <span class="kw">return</span>;
+
+    <span class="cm">// First: recursively delete ALL children</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; root->children.<span class="fn">size</span>(); i++) {
+        <span class="fn">deleteTree</span>(root->children[i]);
+    }
+
+    <span class="cm">// Then: delete this node</span>
+    <span class="kw">delete</span> root;
+}
+
+<span class="cm">// Destructor does the same automatically:
+// ~TreeNode() { for each child: delete child[i]; }
+// delete root → triggers destructor → cascades down</span></code></pre>
+          </div>
+          <div class="warn-box">⚠️ <strong>Common mistake:</strong> Deleting root first, then trying to access children. Once the node is deleted the pointer is dangling — undefined behaviour. Always Children → Then Parent.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Destructor Cascade Example</div>
+          <div class="prose">
+            <p>For a tree with root=1, children=[2,3], where 2 and 3 are leaves:</p>
+            <ol style="margin-left:20px;line-height:2;color:#c0c8e0">
+              <li><code style="color:#4fffb0">delete root (1)</code> triggers <code style="color:#4fffb0">~TreeNode()</code></li>
+              <li>Destructor of 1 iterates children → calls <code style="color:#4fffb0">delete children[0] (=2)</code></li>
+              <li>Node 2 is a leaf, its destructor does nothing, 2 is freed</li>
+              <li>Back to 1's destructor → calls <code style="color:#4fffb0">delete children[1] (=3)</code>, freed</li>
+              <li>1's destructor finishes → node 1 is freed</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(8)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(10)">Next: Binary Search Tree →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 10: BST ===== -->
+      <div class="lesson-page" id="lesson-10">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 11 · BST</div>
+          <h1 class="lesson-title">Binary <span>Search Tree</span></h1>
+          <p class="lesson-subtitle">The ordered binary tree — search in O(log n).</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">BST Definition &amp; Properties</div>
+          <div class="prose">
+            <p>A <strong>Binary Search Tree (BST)</strong> is a binary tree with an ordering property:</p>
+          </div>
+          <div class="term-grid">
+            <div class="term-card">
+              <div class="term-name">Left Subtree</div>
+              <div class="term-def">Contains ONLY nodes with keys LESS THAN the node's key.</div>
+            </div>
+            <div class="term-card">
+              <div class="term-name">Right Subtree</div>
+              <div class="term-def">Contains ONLY nodes with keys GREATER THAN the node's key.</div>
+            </div>
+            <div class="term-card">
+              <div class="term-name">Both Subtrees</div>
+              <div class="term-def">Must EACH also be valid BSTs (recursive definition).</div>
+            </div>
+            <div class="term-card">
+              <div class="term-name">No Duplicates</div>
+              <div class="term-def">Standard BST has no duplicate keys.</div>
+            </div>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">⚡</div>
+            <div class="insight-text"><strong>Why O(log n)?</strong> At each node comparison, you eliminate an entire half of the remaining tree. Start with n nodes → n/2 → n/4 → ... → 1. That's log₂(n) steps. Same reason binary search on sorted arrays is fast — and the BST is essentially a sorted structure arranged in tree form.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">BST Search — Recursive &amp; Iterative</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — Search (Recursive)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="type">Node</span>* <span class="fn">search</span>(<span class="type">Node</span>* root, <span class="kw">int</span> key) {
+    <span class="cm">// Base case: not found OR found</span>
+    <span class="kw">if</span> (root == <span class="kw">NULL</span> || root->key == key)
+        <span class="kw">return</span> root;
+
+    <span class="kw">if</span> (root->key &lt; key)            <span class="cm">// key is in right subtree</span>
+        <span class="kw">return</span> <span class="fn">search</span>(root->right, key);
+
+    <span class="kw">return</span> <span class="fn">search</span>(root->left, key);  <span class="cm">// key is in left subtree</span>
+}</code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — Search (Iterative — no call stack)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="type">Node</span>* <span class="fn">search</span>(<span class="type">Node</span>* root, <span class="kw">int</span> key) {
+    <span class="kw">while</span> (root != <span class="kw">NULL</span>) {
+        <span class="kw">if</span> (root->data == key) <span class="kw">return</span> root;      <span class="cm">// found</span>
+        <span class="kw">else if</span> (key > root->data) root = root->right;  <span class="cm">// go right</span>
+        <span class="kw">else</span> root = root->left;                        <span class="cm">// go left</span>
+    }
+    <span class="kw">return</span> <span class="kw">NULL</span>;  <span class="cm">// not found</span>
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Min &amp; Max in BST</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — Min &amp; Max</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code><span class="cm">// Minimum: go as far LEFT as possible</span>
+<span class="kw">int</span> <span class="fn">minNode</span>(<span class="type">Node</span>* root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>) <span class="kw">return</span> -<span class="num">1</span>;
+    <span class="kw">while</span> (root->left != <span class="kw">NULL</span>)
+        root = root->left;
+    <span class="kw">return</span> root->data;
+}
+
+<span class="cm">// Maximum: go as far RIGHT as possible</span>
+<span class="kw">int</span> <span class="fn">maxNode</span>(<span class="type">Node</span>* root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>) <span class="kw">return</span> -<span class="num">1</span>;
+    <span class="kw">while</span> (root->right != <span class="kw">NULL</span>)
+        root = root->right;
+    <span class="kw">return</span> root->data;
+}
+
+<span class="cm">// Both are O(h) where h = height of tree
+// Balanced BST: O(log n)   Skewed BST: O(n)</span></code></pre>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(9)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(11)">Next: BST Operations →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 11: BST OPERATIONS ===== -->
+      <div class="lesson-page" id="lesson-11">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 12 · BST</div>
+          <h1 class="lesson-title">BST <span>Insert &amp; Full Program</span></h1>
+          <p class="lesson-subtitle">Inserting while maintaining BST ordering property.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Insert into BST</div>
+          <div class="prose"><p>Insertion follows the same logic as search: navigate left or right based on comparison, insert at the first NULL position found.</p></div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C++ — Full BST Program</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>#include &lt;iostream&gt;
+#include &lt;queue&gt;
+<span class="kw">using namespace</span> std;
+
+<span class="kw">struct</span> <span class="type">Node</span> {
+    <span class="kw">int</span> data;
+    <span class="type">Node</span>* left;
+    <span class="type">Node</span>* right;
+};
+
+<span class="type">Node</span>* <span class="fn">createNode</span>(<span class="kw">int</span> data) {
+    <span class="type">Node</span>* n = <span class="kw">new</span> <span class="type">Node</span>();
+    n->data = data;
+    n->left = n->right = <span class="kw">NULL</span>;
+    <span class="kw">return</span> n;
+}
+
+<span class="cm">// Insert maintaining BST property</span>
+<span class="type">Node</span>* <span class="fn">insert</span>(<span class="type">Node</span>* node, <span class="kw">int</span> key) {
+    <span class="kw">if</span> (node == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="fn">createNode</span>(key);  <span class="cm">// insert here</span>
+
+    <span class="kw">if</span> (key &lt; node->data)
+        node->left  = <span class="fn">insert</span>(node->left,  key);  <span class="cm">// go left</span>
+    <span class="kw">else if</span> (key > node->data)
+        node->right = <span class="fn">insert</span>(node->right, key);  <span class="cm">// go right</span>
+    <span class="cm">// if key == node->data: do nothing (no duplicates)</span>
+    <span class="kw">return</span> node;
+}
+
+<span class="kw">void</span> <span class="fn">inorder</span>(<span class="type">Node</span>* root) {
+    <span class="kw">if</span> (root == <span class="kw">NULL</span>) <span class="kw">return</span>;
+    <span class="fn">inorder</span>(root->left);
+    cout &lt;&lt; root->data &lt;&lt; <span class="str">" "</span>;
+    <span class="fn">inorder</span>(root->right);
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="type">Node</span>* root = <span class="fn">createNode</span>(<span class="num">10</span>);
+    root->left  = <span class="fn">createNode</span>(<span class="num">11</span>);
+    root->left->left = <span class="fn">createNode</span>(<span class="num">7</span>);
+    root->right = <span class="fn">createNode</span>(<span class="num">9</span>);
+
+    cout &lt;&lt; <span class="str">"Before: "</span>; <span class="fn">inorder</span>(root); cout &lt;&lt; endl;
+
+    root = <span class="fn">insert</span>(root, <span class="num">12</span>);
+
+    cout &lt;&lt; <span class="str">"After:  "</span>; <span class="fn">inorder</span>(root); cout &lt;&lt; endl;
+    <span class="cm">// Output Before: 7 11 10 9
+    // Output After:  7 11 12 10 9</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <tr><th>Operation</th><th>Average Case</th><th>Worst Case (Skewed)</th></tr>
+            <tr><td>Search</td><td class="good">O(log n)</td><td class="bad">O(n)</td></tr>
+            <tr><td>Insert</td><td class="good">O(log n)</td><td class="bad">O(n)</td></tr>
+            <tr><td>Delete</td><td class="good">O(log n)</td><td class="bad">O(n)</td></tr>
+            <tr><td>Min/Max</td><td class="good">O(log n)</td><td class="bad">O(n)</td></tr>
+            <tr><td>Inorder (sorted)</td><td class="good">O(n)</td><td class="good">O(n)</td></tr>
+          </table>
+        </div>
+
+        <div class="warn-box">⚠️ <strong>BST worst case:</strong> If you insert already-sorted data (1,2,3,4,5,...) into a BST, it degenerates into a linked list! Every node has only a right child. Search becomes O(n). This is why AVL trees and Red-Black trees were invented.</div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(10)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(12)">Next: Types of Binary Trees →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 12: TYPES ===== -->
+      <div class="lesson-page" id="lesson-12">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 13 · Types</div>
+          <h1 class="lesson-title">Types of <span>Binary Trees</span></h1>
+          <p class="lesson-subtitle">8 types — definitions, properties, use cases.</p>
+        </div>
+
+        <div class="term-grid">
+          <div class="term-card">
+            <div class="term-name">1. Binary Search Tree</div>
+            <div class="term-def">Left &lt; Root &lt; Right. No duplicates. Search in O(log n).</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">2. Full Binary Tree</div>
+            <div class="term-def">Every node has 0 or 2 children. No node with exactly 1 child. Also called "Proper" or "Strict".</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">3. Perfect Binary Tree</div>
+            <div class="term-def">All internal nodes have 2 children AND all leaves are at the same level. Every level is completely filled.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">4. Complete Binary Tree</div>
+            <div class="term-def">All levels filled EXCEPT possibly the last, which is filled left to right. Nodes as far left as possible.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">5. Heap</div>
+            <div class="term-def">Complete binary tree + heap property. Max-Heap: parent ≥ children. Min-Heap: parent ≤ children. Used in priority queues & heapsort.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">6. Degenerate Tree</div>
+            <div class="term-def">Each parent has exactly ONE child. Looks and performs like a linked list. O(n) for all operations.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">7. Skewed Tree</div>
+            <div class="term-def">Special degenerate tree: left-skewed (all left children) or right-skewed (all right children).</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">8. Balanced Binary Tree</div>
+            <div class="term-def">For every node: |height(left) - height(right)| ≤ 1. AVL tree is a self-balancing BST. Used in databases &amp; search engines.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Hierarchy: Which includes which?</div>
+          <div class="prose">
+            <p><strong>Perfect</strong> ⊂ <strong>Complete</strong> ⊂ <strong>Binary Tree</strong></p>
+            <p><strong>Perfect</strong> ⊂ <strong>Full</strong> ⊂ <strong>Binary Tree</strong></p>
+            <p><strong>Heap</strong> = Complete + Heap Property</p>
+            <p><strong>BST</strong> = Binary Tree + Ordering Property</p>
+            <p><strong>AVL Tree</strong> = BST + Balanced Property</p>
+          </div>
+        </div>
+
+        <div class="insight">
+          <div class="insight-icon">📐</div>
+          <div class="insight-text"><strong>Perfect vs Complete vs Full — the classic confusion:</strong><br>
+          <strong>Perfect</strong>: ALL leaves same level, ALL internal nodes have 2 children.<br>
+          <strong>Complete</strong>: Last level may be incomplete but filled LEFT TO RIGHT.<br>
+          <strong>Full</strong>: Every node has 0 or 2 children (NOT necessarily same height).<br>
+          A Perfect tree is also Complete and Full. A Complete tree is not necessarily Full.</div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(11)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(13)">Next: Exam Q&A →</button>
+        </div>
+      </div>
+
+      <!-- ===== LESSON 13: EXAM ===== -->
+      <div class="lesson-page" id="lesson-13">
+        <div class="lesson-header">
+          <div class="lesson-tag">Lesson 14 · Exam Prep</div>
+          <h1 class="lesson-title">🎯 Exam <span>Q&amp;A</span></h1>
+          <p class="lesson-subtitle">Likely exam questions with full answers. Click to reveal.</p>
+        </div>
+
+        <div class="exam-section">
+          <div class="exam-title">📋 Theory Questions</div>
+
+          <div class="q-item">
+            <div class="q-num">Q1</div>
+            <div class="q-text">Define a tree. How is it different from a graph?</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">A tree is a connected, acyclic hierarchical data structure where each node has exactly one parent (except the root which has none). Unlike a general graph, a tree: (1) has no cycles, (2) is connected (all nodes reachable from root), (3) has exactly n-1 edges for n nodes, and (4) has a unique path between any two nodes.</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q2</div>
+            <div class="q-text">What is the difference between height and depth of a node?</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">Depth = number of edges from ROOT to the node (root depth = 0). Height = number of edges from the node DOWN to its deepest descendant leaf (leaf height = 0). Height of the tree = height of the root = depth of the deepest leaf.</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q3</div>
+            <div class="q-text">Why is a queue used for level order traversal?</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">Level order traversal is essentially BFS (Breadth-First Search). A queue's FIFO (First In, First Out) property ensures we fully process all nodes at level d before moving to level d+1. We enqueue children when visiting a parent — those children get processed only after all current-level nodes are done.</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q4</div>
+            <div class="q-text">What is the maximum and minimum number of nodes in a binary tree of height h?</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">Maximum = 2^(h+1) - 1 (when every level is completely filled — a perfect binary tree). Minimum = h + 1 (when every internal node has only one child — a degenerate/skewed tree).</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q5</div>
+            <div class="q-text">List all properties of a Binary Search Tree.</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">(1) Left subtree contains only keys LESS THAN root's key. (2) Right subtree contains only keys GREATER THAN root's key. (3) Both left and right subtrees are themselves valid BSTs. (4) No duplicate keys. (5) Inorder traversal of a BST always gives sorted (ascending) output.</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q6</div>
+            <div class="q-text">Differentiate: Full Binary Tree vs Complete Binary Tree vs Perfect Binary Tree.</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">Full: every node has 0 or 2 children (no node with exactly 1 child). Complete: all levels filled except possibly the last, which is filled left to right. Perfect: every internal node has exactly 2 children AND all leaves are at the same level. A Perfect tree is both Full and Complete, but not vice versa.</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q7</div>
+            <div class="q-text">Why should tree deletion use postorder traversal?</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">In postorder (Left → Right → Root), children are always deleted before their parent. If we delete the parent first, we lose the pointers to the children, causing a memory leak. Postorder guarantees the node is deleted only AFTER all its children and their subtrees are safely freed.</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q8</div>
+            <div class="q-text">What is a degenerate tree? When does a BST become degenerate?</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">A degenerate tree is one where each parent has only one child, making it structurally identical to a linked list. A BST becomes degenerate when elements are inserted in sorted (or reverse sorted) order — e.g., inserting 1, 2, 3, 4, 5 creates a right-skewed tree. All operations degrade to O(n).</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exam-section">
+          <div class="exam-title">💻 Code/Algorithm Questions</div>
+
+          <div class="q-item">
+            <div class="q-num">Q9</div>
+            <div class="q-text">Write a recursive function to count the number of leaf nodes in a binary tree.</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">int countLeaf(Node* root) { if (!root) return 0; if (!root->left && !root->right) return 1; return countLeaf(root->left) + countLeaf(root->right); } — Base case 1: NULL → 0. Base case 2: both children NULL → it's a leaf, return 1. Recursive case: sum of leaf counts from left and right subtrees.</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q10</div>
+            <div class="q-text">Trace the inorder traversal of: root=25, left=15, right=50, 15's children={10,22}, 50's children={35,70}.</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">Inorder (L→D→R): Go left to 15 → go left to 10 → 10 has no left → print 10 → 10 has no right → back to 15 → print 15 → go right to 22 → print 22 → back to 25 → print 25 → go right to 50 → go left to 35 → print 35 → print 50 → go right to 70 → print 70. Result: 10, 15, 22, 25, 35, 50, 70 (sorted!)</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q11</div>
+            <div class="q-text">What is the time complexity of searching in a BST, and when does it become O(n)?</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">Average case: O(log n) for a balanced BST because each comparison eliminates half the remaining nodes. Worst case: O(n) when the tree is skewed/degenerate (inserted in sorted order). This is why balanced BSTs (AVL, Red-Black) are preferred in practice — they guarantee O(log n) always.</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q12</div>
+            <div class="q-text">Explain how a destructor can be used to free a tree's memory in C++.</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">Define the destructor ~TreeNode() to iterate through the children vector and call "delete child[i]" for each child. This recursively triggers each child's destructor before that child is freed. When you call "delete root" at the end, this cascade ensures the ENTIRE tree is freed bottom-up (postorder), preventing memory leaks.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exam-section">
+          <div class="exam-title">🧮 Calculation Questions</div>
+
+          <div class="q-item">
+            <div class="q-num">Q13</div>
+            <div class="q-text">A perfect binary tree has height 4. How many total nodes does it have?</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">Formula: 2^(h+1) - 1 where h = height. Answer = 2^(4+1) - 1 = 2^5 - 1 = 32 - 1 = 31 nodes.</div>
+            </div>
+          </div>
+
+          <div class="q-item">
+            <div class="q-num">Q14</div>
+            <div class="q-text">Given a binary tree with 100 nodes, what is the minimum possible height?</div>
+            <div class="q-ans" onclick="toggleAnswer(this)">
+              <div class="q-ans-text">Minimum height = ⌊log₂(n)⌋ = ⌊log₂(100)⌋ = ⌊6.64⌋ = 6. This is achieved when the tree is as complete (as "bushy") as possible.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="btn btn-prev" onclick="showLesson(12)">← Previous</button>
+          <button class="btn btn-next" onclick="showLesson(0)" style="background:var(--accent2);color:white">↺ Back to Start</button>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<script>
+let current = 0;
+const total = 14;
+
+function showLesson(n) {
+  document.querySelectorAll('.lesson-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('lesson-' + n).classList.add('active');
+  document.getElementById('nav-' + n).classList.add('active');
+  document.getElementById('progress').style.width = ((n + 1) / total * 100) + '%';
+  document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+  current = n;
+}
+
+function toggleAnswer(el) {
+  el.classList.toggle('open');
+}
+
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+</script>
+</body>
+</html>
+
