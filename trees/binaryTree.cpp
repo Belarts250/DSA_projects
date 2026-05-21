@@ -26,5 +26,6 @@ class BTNode{
 
        root -> left = node1;
        root -> right = node2;
+       delete root;
     }
 }
