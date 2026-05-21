@@ -21,5 +21,9 @@ class BTNode{
 
     int main(){
        BTNode<int>* root = new BTNode<int>(1); 
+       BTNode<int>* node1 = new BTNode<int>(2);
+       BTNode<int>* node2 = new BTNode<int>(3);
+
+       root -> left = node1;
     }
 }
