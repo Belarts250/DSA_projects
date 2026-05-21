@@ -120,3 +120,47 @@ void inorder(Node* root) {
 
     inorder(root->right);
 }
+
+
+int main() {
+
+    Node* root = NULL;
+
+    // INSERT
+    root = insert(root, 50);
+    root = insert(root, 30);
+    root = insert(root, 70);
+    root = insert(root, 20);
+    root = insert(root, 40);
+    root = insert(root, 60);
+    root = insert(root, 80);
+
+    cout << "BST Inorder Traversal: ";
+    inorder(root);
+
+    cout << endl;
+
+
+
+    // SEARCH
+    int key = 40;
+
+    if(search(root, key)) {
+        cout << key << " Found" << endl;
+    }
+    else {
+        cout << key << " Not Found" << endl;
+    }
+
+
+
+    // DELETE
+    root = deleteNode(root, 70);
+
+    cout << "BST After Deletion: ";
+    inorder(root);
+
+    cout << endl;
+
+    return 0;
+}
