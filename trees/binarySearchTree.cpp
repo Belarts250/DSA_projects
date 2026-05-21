@@ -9,6 +9,7 @@ class BST{
 
     BST(int data){
         data = data;
-        
+        left = NULL;
+        right = NULL;
     }
 }
