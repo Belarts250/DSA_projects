@@ -25,4 +25,8 @@ BST* insert(BST* root, int value){
     if(value < root -> data ){
         left -> data = insert(root->left, value);
     }
+
+    else if(value > root -> data){
+        right -> data = insert (root -> right, value);
+    }
 }
