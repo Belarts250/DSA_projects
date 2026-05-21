@@ -20,6 +20,6 @@ class BTNode{
     }
 
     int main(){
-        
+       BTNode<int>* root = new BTNode<int>(1); 
     }
 }
