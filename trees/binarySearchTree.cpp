@@ -59,5 +59,7 @@ BST* findMin (BST* root){
 }
 
 BST* delete(BST* root, int key){
-    
+    if(root == NULL){
+        return NULL;
+    }
 }
