@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+
 template<typename T>
 class BTNode{
     public:
@@ -18,6 +19,7 @@ class BTNode{
         delete left;
         delete right;
     }
+};
 
     int main(){
        BTNode<int>* root = new BTNode<int>(1); 
@@ -27,5 +29,6 @@ class BTNode{
        root -> left = node1;
        root -> right = node2;
        delete root;
+
+       return 0;
     }
-}
