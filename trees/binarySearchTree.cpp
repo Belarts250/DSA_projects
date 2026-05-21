@@ -70,4 +70,40 @@ BST* delete(BST* root, int key){
     else if (key > root -> data){
         root -> right = delete(root -> right, key);
     }
+     else {
+
+        // CASE 1: No child
+        if(root->left == NULL && root->right == NULL) {
+            delete root;
+            return NULL;
+        }
+
+        // CASE 2: One child
+        else if(root->left == NULL) {
+            Node* temp = root->right;
+            delete root;
+            return temp;
+        }
+
+        else if(root->right == NULL) {
+            Node* temp = root->left;
+            delete root;
+            return temp;
+        }
+
+        // CASE 3: Two children
+        else {
+
+            // Find inorder successor
+            Node* temp = findMin(root->right);
+
+            // Replace value
+            root->data = temp->data;
+
+            // Delete duplicate
+            root->right = deleteNode(root->right, temp->data);
+        }
+    }
+
+    return root;
 }
