@@ -66,4 +66,8 @@ BST* delete(BST* root, int key){
     if(key < root->data){
         root -> left = delete(root -> left, key);
     }
+
+    else if (key > root -> data){
+        root -> right = delete(root -> right, key);
+    }
 }
