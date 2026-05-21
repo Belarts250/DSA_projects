@@ -29,4 +29,24 @@ BST* insert(BST* root, int value){
     else if(value > root -> data){
         right -> data = insert (root -> right, value);
     }
+
+    return root;
+}
+
+bool search(BST* root, int key){
+    if(root == NULL) return false;
+
+    if (root -> data == key ){
+        return true;
+    }
+
+    if (key < root -> data){
+        return search (root -> left , key);
+    }
+
+
+    if (key > root -> data){
+        return search (root -> right , key);
+    }
+    return false;
 }
