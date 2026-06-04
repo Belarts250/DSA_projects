@@ -126,7 +126,7 @@ int main() {
 
     Node* root = NULL;
 
-//new roots
+//new 
     root = insert(root, 50);
     root = insert(root, 30);
     root = insert(root, 70);
