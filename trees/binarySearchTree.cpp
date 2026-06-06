@@ -125,7 +125,7 @@ void inorder(Node* root) {
 int main() {
 
     Node* root = NULL;
-//ok
+//
 
     root = insert(root, 50);
     root = insert(root, 30);
