@@ -3,9 +3,7 @@
 #include <string>
 #include <list>
 
-//Twarimitswe Aaron 
-//Igihozo Belise
-//Kamana Clare
+
 
 using namespace std;
 
