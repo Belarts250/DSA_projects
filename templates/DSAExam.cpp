@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Linked lists
+//Linked 
 
 struct PatientsLL {
     int patient_id;
