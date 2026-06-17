@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Linked 
+//Linked list structures for Patients, Doctors, and Appointments
 
 struct PatientsLL {
     int patient_id;
